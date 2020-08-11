@@ -1,97 +1,29 @@
-# Code by Pop => Cheese for only 3,4 input
-
-def factorial(n):
-    total = 1
-    for i in range(1, n + 1):
-        total *= i
-    return total
-
-
+# @todo #1:2days Fix permutation order, Check permutation code
 if __name__ == '__main__':
     print('*** Fun with permute ***')
     num = [int(i) for i in input('input : ').split(',')]
-
+    ans = []
     print('Original Cofllection: ', num)  # Typo for grader purpose
-    print('Collection of distinct numbers:')
+    # ans.append(num)
     num.reverse()
-    case = 0
-    if len(num) == 3:
-        case = 1
-    elif len(num) == 4:
-        case = 2
-    # print('length = ', len(num))
-    # print('reverse = ', num)
-    totalList = []
-    starterList = []
-    # append to new List
     for i in range(len(num)):
-        starterList.append(num[i])
-
-    start_index = 0
-    next_index = 0
-    if case == 1:
-        # append to totalList
-        totalList.append(starterList)
-        for i in range(factorial(len(num))-1):
-            # print('--------------')
-            # print('loop =', i)
-            newList = []
-
-            start_index = -len(num) + i
-            next_index = -len(num) + i + 1
-            # print('start = ', start)
-            # print('next = ', next)
-
-            # swap!!!
-            num[start_index], num[next_index] = num[next_index], num[start_index]
-
-            # append to new List
-            for j in range(len(num)):
-                newList.append(num[j])
-
-            # append to totalList
-            totalList.append(newList)
-
-            # print('totalList now = ', totalList)
-            # print('--------------')
-    elif case == 2:
-
-        case2_list = []
-        for i in range(1, len(num)):
-            case2_list.append(num[i])
-        for i in range(factorial(len(num))):
-            if i % 4 == 0:
-                case_list = list()
-                case_list.append(starterList[0])
-                i = i//4
-                newList = []
-                start2 = -len(num) + i
-                next2 = -len(num) + 1 + i
-                # swap!!!
-                if i != 0:
-                    case2_list[start2], case2_list[next2] = case2_list[next2], case2_list[start2]
-                # append to new List
-                for j in range(len(num)):
-                    newList.append(num[j])
-                # extend to caseList
-                case_list.extend(case2_list)
-                # append to totalList
-                totalList.append(case_list)
+        temp = num.copy()
+        print("Big loop", i)
+        for j in range(i, len(num)):
+            # print(temp[j], temp[j+1], end=" ")
+            if i < len(num)-1:
+                print('Normal', end=" ")
+                temp[j], temp[j+1] = temp[j+1], temp[j]
             else:
-                if i % 4 == 1:
-                    num = case_list.copy()
-                i = (i % 4)-1
-                newList = []
-                start_index = -len(num) + i
-                next_index = -len(num) + 1 + i
+                print('Special', end=" ")
+                temp[0], temp[len(num)-1] = temp[len(num)-1], temp[0]
+            print(temp)
+            clone = temp.copy()
+            if clone in ans:
+                continue
+            ans.append(clone)
+    rev = num.copy()
+    rev.reverse()
+    # ans.append(rev)
+    print('Collection of distinct numbers:\n', ans)
 
-                # swap!!!
-                num[start_index], num[next_index] = num[next_index], num[start_index]
-                # append to new List
-                for j in range(len(num)):
-                    newList.append(num[j])
-
-                # append to totalList
-                totalList.append(newList)
-
-    print('', totalList)
