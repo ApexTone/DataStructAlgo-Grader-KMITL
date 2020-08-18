@@ -6,7 +6,7 @@ class Game:
     def link(self, new_word):
         if len(self.words) == 0:
             self.words.append(new_word)
-            print(f'{new_word} -> {self.words}')
+            print(f'\'{new_word}\' -> {self.words}')
             self.is_end = False
             return
         last_word = self.words[-1]  # get last element
@@ -14,10 +14,11 @@ class Game:
         f2cn = new_word[0:2].lower()
         if l2cl == f2cn:
             self.words.append(new_word)
-            print(f'{new_word} -> {self.words}')
+            print(f'\'{new_word}\' -> {self.words}')
             self.is_end = False
         else:
             self.is_end = True  # end game here
+            print(f'\'{new_word}\' -> game over')
 
     def restart(self):
         print('game restarted')
