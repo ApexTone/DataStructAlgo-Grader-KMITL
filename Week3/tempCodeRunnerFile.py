@@ -1,1 +1,0 @@
-to blast: {current_color}')
