@@ -35,6 +35,7 @@ def infix_to_postfix(exp):  # code this -> bug
         '/': 2,
         '^': 3,
     }
+    # how to optimize?
     for letter in exp:
         if letter in '+-*/^':  # interesting part
             if s.is_empty():
@@ -43,7 +44,7 @@ def infix_to_postfix(exp):  # code this -> bug
                 while not s.is_empty():
                     if s.peek() == '(':
                         break
-                    else:
+                    else:  # don't change this
                         if priority.get(s.peek(), -2) < priority.get(letter, -2):
                             break
                         else:
