@@ -24,24 +24,35 @@ class Stack:
         self.items.append(value)
 
 
-def infix_to_postfix(exp):
-    postfix = ""
+def infix_to_postfix(exp):  # code this -> bug
     s = Stack()
+    postfix = ''
     priority = {
+        '(': -99,
         '+': 0,
         '-': 0,
-        '*': 1,
-        '/': 1,
-        '^': 2,
-        '(': -1,
+        '*': 2,
+        '/': 2,
+        '^': 3,
     }
     for letter in exp:
-        if letter in "+-*/(":
-            while priority.get(s.peek(), -2) >= priority.get(letter, -2):
-                postfix += s.pop()
+        if letter in '+-*/^':  # interesting part
+            if s.is_empty():
+                s.push(letter)
+            else:
+                while not s.is_empty():
+                    if s.peek() == '(':
+                        break
+                    else:
+                        if priority.get(s.peek(), -2) < priority.get(letter, -2):
+                            break
+                        else:
+                            postfix += s.pop()
+                s.push(letter)
+        elif letter == '(':
             s.push(letter)
-        elif letter == ")":
-            while s.peek() != "(":
+        elif letter == ')':
+            while s.peek() != '(':
                 postfix += s.pop()
             s.pop()
         else:
