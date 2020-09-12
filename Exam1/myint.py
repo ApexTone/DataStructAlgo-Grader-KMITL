@@ -32,7 +32,7 @@ class MyInt:
         return out
 
     def __sub__(self, obj):
-        return self.value - (obj.value//2)
+        return self.value - (obj.value // 2)
 
 
 def use_myint(in1, in2):

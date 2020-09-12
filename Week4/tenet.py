@@ -64,14 +64,18 @@ if __name__ == '__main__':
     while True:
         defuser_group = -1
         exploded = False
-        for i in range(len(red) - 2):
+        for i in range(len(red) - 2):  # problem?
             if len(defuser) > 0:
                 if will_explode(red[i], red[i+1], red[i+2]):
                     red.insert(i+2, defuser.pop())
                     defuser_group = i
+            print(red)
+            for j in range(i):
+                print('     ', end="")
+            # loop doesn't reached the end (consider special case)
+            print(red[i:i+3])
+            if will_explode(red[i], red[i + 1], red[i + 2]):  # don't check last element
 
-            if will_explode(red[i], red[i + 1], red[i + 2]):
-                # print(red)
                 if defuser_group == i:  # bad defuser placement
                     mistakes += 1
                 else:
@@ -165,4 +169,15 @@ EEDZDDCBXBBAYAA
 5
 TENET
 (EZEERF) ! ! ! (s)evisolpxE 4
+
+Enter Input (Red, Blue) : pppaaaabbbb pppaaaa  -> consider this case
+Red Team :
+10
+baapaapapp //bbbbaapaapapp bad output
+1 Explosive(s) ! ! ! (HEAT)
+----------TENETTENET----------
+: maeT eulB
+1
+a
+(EZEERF) ! ! ! (s)evisolpxE 2
 '''
