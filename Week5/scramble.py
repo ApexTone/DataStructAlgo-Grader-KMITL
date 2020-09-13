@@ -1,4 +1,6 @@
 import math
+import random
+
 
 class Node:
     def __init__(self, value, next_node=None, prev_node=None):
@@ -19,7 +21,8 @@ class LinkedList:
                 self.push_back(item)
 
     def is_empty(self):
-        return self.head is None or self.tail is None  # inspect this clause and head/tail assignment
+        # inspect this clause and head/tail assignment
+        return self.head is None or self.tail is None
 
     def size(self):
         buffer = self.head
@@ -251,7 +254,7 @@ class Scramble:
         self.shuffle_card = math.floor(self.data.size()*percent/100)
         self.shuffle_percent = percent
         main_pack, insert_pack = self.split_pack(self.shuffle_card)
-        # print(main_pack, '\t', insert_pack)
+        # print(f'A: {main_pack}\tB: {insert_pack}')
         # insertion at 1, 3, 5, ...
         to_loop = insert_pack.size()  # self.data.size() - self.shuffle_card
         for i in range(1, to_loop+1):
@@ -269,25 +272,33 @@ class Scramble:
         print(f'BottomUp {percent:.3f} % :', bottom)
         self.data = bottom
 
-    def de_shuffle(self):  # fix this
+    def de_shuffle(self):
         a_list = LinkedList()
         b_list = LinkedList()
         count = 0
         # print(self.shuffle_card)
-        if self.shuffle_card >= 5:
+        if self.shuffle_card >= self.data.size()/2:  # problem here
             for i in range(self.data.size()):
-                if i % 2 == 1 and count < self.data.size() - self.shuffle_card:
-                    a_list.push_back(self.data.element_at(i))
+                '''
+                if i % 2 == 1 and count < self.data.size()-self.shuffle_card:
+                    b_list.push_back(self.data.element_at(i))
                     count += 1
                 else:
+                    a_list.push_back(self.data.element_at(i))
+                '''
+                if i % 2 == 1 and count < self.data.size() - self.shuffle_card:
                     b_list.push_back(self.data.element_at(i))
-            # print(a_list, '\t', b_list)
+                    count += 1
+                else:
+                    a_list.push_back(self.data.element_at(i))
+            # print(f'B: {b_list}\tA: {a_list}')
             while not self.data.is_empty():
                 self.data.pop_front()
-            while not b_list.is_empty():
-                self.data.push_back(b_list.pop_front())
             while not a_list.is_empty():
                 self.data.push_back(a_list.pop_front())
+            while not b_list.is_empty():
+                self.data.push_back(b_list.pop_front())
+
         else:
             for i in range(self.data.size()):
                 if i % 2 == 0 and count < self.shuffle_card:
@@ -295,7 +306,7 @@ class Scramble:
                     count += 1
                 else:
                     b_list.push_back(self.data.element_at(i))
-            # print(a_list, '\t', b_list)
+            # print(f'A: {a_list}\tB: {b_list}')
             while not self.data.is_empty():
                 self.data.pop_front()
             while not a_list.is_empty():
@@ -312,20 +323,71 @@ class Scramble:
         print(f'Debottomup {self.bottom_up_percent:.3f} % :', bottom)
         self.data = bottom
 
+    def to_list(self):
+        lst = []
+        for j in range(self.data.size()):
+            lst.append(self.data.element_at(j))
+        return lst
+
     def __str__(self):
         return str(self.data)
 
 
-def test():
-    sc = Scramble([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-    sc.bottom_up(30)
-    sc.shuffle(60)
-    print('------------------------------')
-    sc.de_shuffle()
-    sc.de_bottom_up()
+def stress1():
+    lst1 = []
+    lst2 = []
+    lst3 = []
+    for i in range(1, 11):
+        lst1.append(i)
+        lst2.append(i)
+        lst3.append(i)
+    for i in range(11, 21):
+        lst2.append(i)
+        lst3.append(i)
+    for i in range(21, 31):
+        lst3.append(i)
+    while True:  # stress test is OK -> probably problem with shuffle()
+        sc1 = Scramble(lst1)
+        sc2 = Scramble(lst2)
+        sc3 = Scramble(lst3)
+        p1, p2, p3 = random.random()*100, random.random()*100, random.random()*100
+        sc1.shuffle(p1)
+        sc1.de_shuffle()
+        if sc1.to_list() != lst1:
+            print("Data don't deshuffle well")
+            break
+        print('*****************************')
+        sc2.shuffle(p2)
+        sc2.de_shuffle()
+        if sc2.to_list() != lst2:
+            print("Data don't deshuffle well")
+            break
+        print('*****************************')
+        sc3.shuffle(p3)
+        sc3.de_shuffle()
+        if sc3.to_list() != lst3:
+            print("Data don't deshuffle well")
+            break
+
+
+def stress2():
+    while True:
+        lst = []
+        for i in range(1, 100+math.floor(random.random()*100)):
+            lst.append(i)
+        sc = Scramble(lst)
+        sc.bottom_up(random.random()*100)
+        sc.shuffle(random.random()*100)
+        sc.de_shuffle()
+        sc.de_bottom_up()
+        print('*****************************')
+        if sc.to_list() != lst:
+            print("Data don't match")
+            break
 
 
 if __name__ == '__main__':
+    stress2()
     inp = input('Enter Input : ').split('/')
     initial = list(map(int, inp[0].split()))
     scramble_list = inp[1].split('|')
@@ -340,7 +402,7 @@ if __name__ == '__main__':
         if i < len(scramble_list) / 2:
             for j in range(len(cmd)):
                 method, percent = cmd[j].split()
-                percent = float(percent)
+                percent = round(float(percent), 3)
                 order.push_back(method)
                 if method == 'B':
                     sc.bottom_up(percent)
@@ -356,7 +418,7 @@ if __name__ == '__main__':
         else:
             for j in range(len(cmd)-1, -1, -1):
                 method, percent = cmd[j].split()
-                percent = float(percent)
+                percent = round(float(percent), 3)
                 order.push_back(method)
                 if method == 'B':
                     sc.bottom_up(percent)
