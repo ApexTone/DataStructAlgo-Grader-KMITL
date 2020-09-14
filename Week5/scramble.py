@@ -90,7 +90,7 @@ class LinkedList:
 
     def pop_back(self):
         if self.is_empty():
-            print('List is empty')
+            # print('List is empty')
             return -1
         last = self.tail
         self.tail = last.prev_node
@@ -103,7 +103,7 @@ class LinkedList:
 
     def pop_front(self):
         if self.is_empty():
-            print('List is empty')
+            # print('List is empty')
             return -1
         first = self.head
         self.head = self.head.next_node
@@ -132,7 +132,7 @@ class LinkedList:
 
     def remove(self, value):
         if self.is_empty() or not self.is_in(value):
-            print("Value not found in list")
+            # print("Value not found in list")
             return -1
         else:
             buffer = self.head
@@ -214,7 +214,7 @@ class LinkedList:
 
     def __str__(self):
         if self.is_empty():
-            return 'Empty'
+            return ''
         else:
             buffer = self.head
             out = ''
@@ -333,7 +333,7 @@ class Scramble:
         return str(self.data)
 
 
-def stress1():
+def small_stress():
     lst1 = []
     lst2 = []
     lst3 = []
@@ -370,24 +370,31 @@ def stress1():
             break
 
 
-def stress2():
+def large_stress():
     while True:
         lst = []
-        for i in range(1, 100+math.floor(random.random()*100)):
+        for i in range(1, 1000+math.floor(random.random()*100)):
             lst.append(i)
         sc = Scramble(lst)
-        sc.bottom_up(random.random()*100)
-        sc.shuffle(random.random()*100)
-        sc.de_shuffle()
-        sc.de_bottom_up()
-        print('*****************************')
+        choice = math.floor(random.random()*10) % 2
+        if choice == 1:
+            sc.shuffle(random.random()*100)
+            sc.bottom_up(random.random() * 100)
+            sc.de_bottom_up()
+            sc.de_shuffle()
+        else:
+            sc.bottom_up(random.random() * 100)
+            sc.shuffle(random.random() * 100)
+            sc.de_shuffle()
+            sc.de_bottom_up()
+        print('\n')
         if sc.to_list() != lst:
             print("Data don't match")
             break
 
 
 if __name__ == '__main__':
-    stress2()
+    # large_stress()
     inp = input('Enter Input : ').split('/')
     initial = list(map(int, inp[0].split()))
     scramble_list = inp[1].split('|')
@@ -399,38 +406,17 @@ if __name__ == '__main__':
         sc = Scramble(initial)
         print('--------------------------------------------------')
         print(f'Start : {sc}')
-        if i < len(scramble_list) / 2:
-            for j in range(len(cmd)):
-                method, percent = cmd[j].split()
-                percent = round(float(percent), 3)
-                order.push_back(method)
-                if method == 'B':
-                    sc.bottom_up(percent)
-                else:
-                    sc.shuffle(percent)
-
-            while not order.is_empty():
-                method = order.pop_back()
-                if method == 'B':
-                    sc.de_bottom_up()
-                else:
-                    sc.de_shuffle()
+        # print(cmd)
+        if cmd[0][0] == 'B' and cmd[1][0] == 'R':
+            sc.bottom_up(float(cmd[0][2:]))
+            sc.shuffle(float(cmd[1][2:]))
+            sc.de_shuffle()
+            sc.de_bottom_up()
         else:
-            for j in range(len(cmd)-1, -1, -1):
-                method, percent = cmd[j].split()
-                percent = round(float(percent), 3)
-                order.push_back(method)
-                if method == 'B':
-                    sc.bottom_up(percent)
-                else:
-                    sc.shuffle(percent)
-
-            while not order.is_empty():
-                method = order.pop_back()
-                if method == 'B':
-                    sc.de_bottom_up()
-                else:
-                    sc.de_shuffle()
+            sc.bottom_up(float(cmd[1][2:]))
+            sc.shuffle(float(cmd[0][2:]))
+            sc.de_shuffle()
+            sc.de_bottom_up()
     print('--------------------------------------------------')
 
 '''
@@ -510,5 +496,33 @@ BottomUp 93.757 % : 19 20 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
 Riffle 40.560 % : 19 7 20 8 1 9 2 10 3 11 4 12 5 13 6 14 15 16 17 18
 Deriffle 40.560 % : 19 20 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
 Debottomup 93.757 % : 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+--------------------------------------------------
+
+
+Enter Input : 1 2 3 4 5 6 7 8 9 10/B 30,R 60|B 50,R 50|R 10,B 20|B 27,R 73
+--------------------------------------------------
+Start : 1 2 3 4 5 6 7 8 9 10 
+BottomUp 30.000 % : 4 5 6 7 8 9 10 1 2 3 
+Riffle 60.000 % : 4 10 5 1 6 2 7 3 8 9
+Deriffle 60.000 % : 4 5 6 7 8 9 10 1 2 3
+Debottomup 30.000 % : 1 2 3 4 5 6 7 8 9 10 
+--------------------------------------------------
+Start : 1 2 3 4 5 6 7 8 9 10 
+BottomUp 50.000 % : 6 7 8 9 10 1 2 3 4 5
+Riffle 50.000 % : 6 1 7 2 8 3 9 4 10 5
+Deriffle 50.000 % : 6 7 8 9 10 1 2 3 4 5
+Debottomup 50.000 % : 1 2 3 4 5 6 7 8 9 10
+--------------------------------------------------
+Start : 1 2 3 4 5 6 7 8 9 10
+BottomUp 20.000 % : 3 4 5 6 7 8 9 10 1 2
+Riffle 10.000 % : 3 4 5 6 7 8 9 10 1 2
+Deriffle 10.000 % : 3 4 5 6 7 8 9 10 1 2
+Debottomup 20.000 % : 1 2 3 4 5 6 7 8 9 10
+--------------------------------------------------
+Start : 1 2 3 4 5 6 7 8 9 10
+Riffle 73.000 % : 1 8 2 9 3 10 4 5 6 7
+BottomUp 27.000 % : 2 9 3 10 4 5 6 7 1 8
+Debottomup 27.000 % : 1 8 2 9 3 10 4 5 6 7
+Deriffle 73.000 % : 1 2 3 4 5 6 7 8 9 10
 --------------------------------------------------
 '''

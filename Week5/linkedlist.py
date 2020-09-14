@@ -17,7 +17,8 @@ class LinkedList:
                 self.push_back(item)
 
     def is_empty(self):
-        return self.head is None or self.tail is None  # inspect this clause and head/tail assignment
+        # inspect this clause and head/tail assignment
+        return self.head is None or self.tail is None
 
     def size(self):
         buffer = self.head
