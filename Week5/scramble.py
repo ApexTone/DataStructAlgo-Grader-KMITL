@@ -277,15 +277,8 @@ class Scramble:
         b_list = LinkedList()
         count = 0
         # print(self.shuffle_card)
-        if self.shuffle_card >= self.data.size()/2:  # problem here
+        if self.shuffle_card >= self.data.size()/2:
             for i in range(self.data.size()):
-                '''
-                if i % 2 == 1 and count < self.data.size()-self.shuffle_card:
-                    b_list.push_back(self.data.element_at(i))
-                    count += 1
-                else:
-                    a_list.push_back(self.data.element_at(i))
-                '''
                 if i % 2 == 1 and count < self.data.size() - self.shuffle_card:
                     b_list.push_back(self.data.element_at(i))
                     count += 1
@@ -298,7 +291,6 @@ class Scramble:
                 self.data.push_back(a_list.pop_front())
             while not b_list.is_empty():
                 self.data.push_back(b_list.pop_front())
-
         else:
             for i in range(self.data.size()):
                 if i % 2 == 0 and count < self.shuffle_card:
