@@ -162,8 +162,6 @@ def findMode(list):
         print(out)
 
 
-
-
 if __name__ == '__main__':
     numbers = list(map(int,input('Enter numbers : ').split()))
     list = LinkedList()

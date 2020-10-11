@@ -53,5 +53,5 @@ def parenthesis_check(exp):
 
 
 if __name__ == '__main__':
-    exp = input("Enter Input : ")
-    parenthesis_check(exp)
+    pre = input("Enter Input : ")
+    parenthesis_check(pre)
