@@ -1,16 +1,16 @@
 def insertion_index(lst, curr_index, value):  # shift list value and return insertion index
-    if curr_index > 0 and lst[curr_index - 1] > value:
-        lst[curr_index] = lst[curr_index - 1]
-        return insertion_index(lst, curr_index - 1, value)
+    if curr_index > 0 and lst[curr_index - 1] > value:  # if this is not where to insert
+        lst[curr_index] = lst[curr_index - 1]  # shift list element
+        return insertion_index(lst, curr_index - 1, value)  # compare with another element
     else:
-        return curr_index
+        return curr_index  # return insertion index
 
 
 def insertion_sort(lst, start=0, length=None, progress=0):
     if length is None:  # for less parameters passing
         length = len(lst)
 
-    value = lst[start]  # value to be inserted
+    value = lst[start]  # store value to be inserted
 
     index = insertion_index(lst, start, value)  # get insertion index and shift the list
     lst[index] = value  # insert value to the index
@@ -28,7 +28,7 @@ def insertion_sort(lst, start=0, length=None, progress=0):
 
 if __name__ == '__main__':
     in_lst = list(map(int, input("Enter Input : ").split()))
-    out = []
+    # Python function parameter is passed by reference, No return needed! Change will be applied directly.
     insertion_sort(in_lst)
     print("sorted")
     print(in_lst)
