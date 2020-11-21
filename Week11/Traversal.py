@@ -7,10 +7,10 @@ class Graph:
         for src in vertices_lst:
             self.weight[src] = []
 
-    def add_edge(self, start, end, weight=1, bidir=False):
+    def add_edge(self, start, end, undirect=False):
         if end not in self.weight[start]:
             self.weight[start].append(end)
-        if bidir:
+        if undirect:
             if start not in self.weight[end]:
                 self.weight[end].append(start)
 
@@ -32,36 +32,61 @@ class Graph:
                     print(", ", end="")
             print()
 
-    def bfs(self, start):
+    def bfs(self, start=None):
+        if start is None:
+            for key in self.weight:
+                start = key
+                break
         visited = set()
-        queue = [start]
+        queue = [[start]]
         visited.add(start)
         out = ""
         while len(queue) > 0:
-            vertex = queue.pop(0)
-            out += str(vertex) + ' '
-            for item in self.weight[vertex]:
-                if item not in visited:
-                    queue.append(item)
-                    visited.add(item)
-            queue = sorted(queue, key=lambda x: ord(x))
-        print(f"Breadth First Traversals : {out}")
+            lst = queue.pop(0)
+            for vertex in lst:
+                tmp_lst = []
+                out += str(vertex) + ' '
+                for item in self.weight[vertex]:
+                    if item not in visited:
+                        visited.add(item)
+                        tmp_lst.append(item)
+                queue.append(sorted(tmp_lst))
+        print(f"Bredth First Traversals : {out}")  # typo for grader
 
-
-    def dfs(self, start):
+    def bfs2(self):
         visited = set()
-        stack = [start]
-        visited.add(start)
+        queue = []
         out = ""
-        while len(stack) > 0:
-            vertex = stack.pop()
-            out += str(vertex) + ' '
-            for item in self.weight[vertex]:
-                if item not in visited:
-                    stack.append(item)
-                    visited.add(item)
-            stack = sorted(stack, key=lambda x: ord(x))
-        print(f"Depth First Traversals : {out}")
+        for v in self.weight:
+            if v not in visited:
+                queue.append(v)
+                visited.add(v)
+            while len(queue) > 0:
+                lst = queue.pop(0)
+                for vertex in lst:
+                    tmp_lst = []
+                    out += str(vertex) + ' '
+                    for item in self.weight[vertex]:
+                        if item not in visited:
+                            visited.add(item)
+                            tmp_lst.append(item)
+                    queue.append(sorted(tmp_lst))
+        print(f"Bredth First Traversals : {out}")  # typo for grader
+
+    def _dfs(self, start, visited):
+        visited.add(start)
+        print(start, end=" ")
+        for vertex in self.weight[start]:
+            if vertex not in visited:
+                self._dfs(vertex, visited)
+
+    def dfs(self):
+        visited = set()
+        print("Depth First Traversals : ", end="")
+        for vertex in self.weight:
+            if vertex not in visited:
+                self._dfs(vertex, visited)
+        print()
 
     def __str__(self):
         return str(self.weight)
@@ -81,8 +106,7 @@ if __name__ == '__main__':
     g = Graph(vertex_lst)
     for item in lst:
         src, dest = item.split()
-        g.add_edge(src, dest, True)
-    g.adj_matrix()
-    g.dfs(vertex_lst[0])
-    g.bfs(vertex_lst[0])
+        g.add_edge(src, dest, undirect=True)
+    g.dfs()
+    g.bfs2()
 
