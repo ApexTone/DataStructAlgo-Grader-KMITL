@@ -32,28 +32,7 @@ class Graph:
                     print(", ", end="")
             print()
 
-    def bfs(self, start=None):
-        if start is None:
-            for key in self.weight:
-                start = key
-                break
-        visited = set()
-        queue = [[start]]
-        visited.add(start)
-        out = ""
-        while len(queue) > 0:
-            lst = queue.pop(0)
-            for vertex in lst:
-                tmp_lst = []
-                out += str(vertex) + ' '
-                for item in self.weight[vertex]:
-                    if item not in visited:
-                        visited.add(item)
-                        tmp_lst.append(item)
-                queue.append(sorted(tmp_lst))
-        print(f"Bredth First Traversals : {out}")  # typo for grader
-
-    def bfs2(self):
+    def bfs(self):
         visited = set()
         queue = []
         out = ""
@@ -108,5 +87,5 @@ if __name__ == '__main__':
         src, dest = item.split()
         g.add_edge(src, dest, undirect=True)
     g.dfs()
-    g.bfs2()
+    g.bfs()
 
